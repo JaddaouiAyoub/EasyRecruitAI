@@ -127,7 +127,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     detected_classes = results.xywh[0][:, -1].tolist()  # Detected object classes
                     detected_confidences = results.xywh[0][:, 4].tolist()  # Confidence levels
                     # Print the raw results to understand what the model is detecting
-                    # print("Raw YOLO results:", results)
+                    print("Raw YOLO results:", results)
 
                     # detected_labels = results.names  # Get class names (e.g., 'person', 'cell phone')
                     # detected_classes = results.xywh[0][:, -1].tolist()  # Detected object classes
@@ -146,7 +146,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     if detected_text:
                         await websocket.send_text(f"Detection: {', '.join(detected_text)}")
                     else:
-                        # print(f"No significant objects detected.")
+                        print(f"No significant objects detected.")
                         await websocket.send_text("No significant objects detected.")
 
                 except Exception as e:

@@ -18,8 +18,15 @@ COPY . .
 # Étape 5 : Installer les dépendances Python
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Installer PyTorch et les dépendances YOLO
+RUN pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu \
+    && pip install --no-cache-dir ultralytics
+
 # Ajouter le support WebSocket
-RUN pip install --no-cache-dir "uvicorn[standard]"  # Ou bien websockets
+RUN pip install --no-cache-dir "uvicorn[standard]" websockets
+
+# Supprimer le cache PyTorch pour éviter les conflits
+RUN rm -rf ~/.cache/torch/hub
 
 # Étape 6 : Exposer le port sur lequel l'application sera exécutée
 EXPOSE 8000
