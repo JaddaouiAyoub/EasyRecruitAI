@@ -18,7 +18,7 @@ app = FastAPI()
 # Ajouter la configuration CORS pour permettre l'accès au frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],  # L'adresse de votre frontend Angular
+    allow_origins=["*"],  # L'adresse de votre frontend Angular
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
