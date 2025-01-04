@@ -18,6 +18,9 @@ COPY . .
 # Étape 5 : Installer les dépendances Python
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Ajouter le support WebSocket
+RUN pip install --no-cache-dir "uvicorn[standard]"  # Ou bien websockets
+
 # Étape 6 : Exposer le port sur lequel l'application sera exécutée
 EXPOSE 8000
 
