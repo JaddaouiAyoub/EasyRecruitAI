@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: fastapi-app
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: UVICORN_WORKERS
+        value: "1"  # Nombre de workers Uvicorn
+    healthCheckPath: /
+    port: 8000
