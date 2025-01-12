@@ -1,8 +1,15 @@
-fastapi
-uvicorn
-numpy
-pillow
-torch
-ultralytics
-speechrecognition
-python-multipart
+fastapi==0.95.1
+uvicorn==0.22.0
+torch==1.13.1
+ultralytics==8.0.24
+PyMuPDF==1.19.6
+pillow==9.4.0
+numpy==1.23.5
+pydub==0.25.1
+SpeechRecognition==3.8.1
+aiofiles==23.1.0  # Utilisé pour gérer les fichiers de manière asynchrone avec FastAPI
+python-multipart==0.0.5  # Permet de gérer les fichiers multipart (comme les fichiers téléchargés)
+requests==2.28.2  # Peut être nécessaire pour des appels API externes
+scikit-learn==1.2.0  # Utilisé pour certaines opérations de calcul scientifique ou apprentissage automatique
+scipy==1.10.0  # Peut être nécessaire pour des calculs scientifiques ou des algorithmes de traitement
+joblib==1.2.0  # Utilisé pour sérialiser et désérialiser des objets (utile dans le machine learning)

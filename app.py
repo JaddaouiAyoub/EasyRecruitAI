@@ -8,6 +8,9 @@ import numpy as np
 import base64
 import torch
 import ultralytics
+import fitz  # PyMuPDF pour extraire le texte rapidement
+import re
+from typing import List, Optional
 print(ultralytics.__version__)
 
 # Load YOLO model (YOLOv5 for this example)
@@ -186,6 +189,73 @@ async def transcribe_audio(file: UploadFile = File(...)):
     except Exception as e:
         return {"error": f"Une erreur inattendue est survenue : {e}"}
 
+
+def extract_text_from_pdf_fast(pdf_file):
+    """
+    Extraire le texte brut d'un fichier PDF.
+    :param pdf_file: Fichier PDF chargé
+    :return: Texte extrait (str)
+    """
+    text = ""
+    with fitz.open(stream=pdf_file, filetype="pdf") as pdf:
+        for page in pdf:
+            text += page.get_text()
+    if not text.strip():
+        raise ValueError("Le fichier PDF ne contient pas de texte extractible.")
+    return text
+
+def preprocess_text(text):
+    """
+    Prétraitement du texte : conversion en minuscules, suppression des caractères spéciaux.
+    """
+    text = text.lower()
+    text = re.sub(r'[^\w\s]', '', text)  # Supprimer les caractères spéciaux
+    return text
+
+def calculate_keyword_score(cv_text, keywords):
+    """
+    Calculer un score basé sur les mots-clés pour un CV.
+    :param cv_text: Contenu du CV (str)
+    :param keywords: Liste des mots-clés (list)
+    :return: Score (float) sur une échelle de 0 à 10
+    """
+    if not keywords:
+        return 0.0  # Pas de mots-clés fournis, score = 0
+    cv_tokens = set(preprocess_text(cv_text).split())
+    keyword_tokens = set(preprocess_text(" ".join(keywords)).split())
+    match_count = len(cv_tokens.intersection(keyword_tokens))
+    score = (match_count / len(keyword_tokens)) * 10 if keyword_tokens else 0.0
+    return min(score, 10.0)  # Limiter le score maximum à 10
+
+@app.post("/score-cv/")
+async def score_cv(
+    cv_file: UploadFile = File(...), 
+    keywords: Optional[List[str]] = None
+):
+    """
+    Endpoint pour calculer un score initial pour un CV.
+    :param cv_file: Fichier PDF du CV
+    :param keywords: Liste des mots-clés associés à l'offre (optionnel)
+    :return: Score calculé
+    """
+    try:
+        # Extraction du texte depuis le PDF
+        cv_text = extract_text_from_pdf_fast(cv_file.file.read())
+        print("Texte extrait du CV :", cv_text)
+
+        # Calcul des scores
+        keyword_score = calculate_keyword_score(cv_text, keywords or [])
+        print("Score basé sur mots-clés :", keyword_score)
+        
+        # Si aucun mot-clé n'est fourni, seul le score final basé sur mots-clés sera retourné.
+        final_score = keyword_score
+
+        return {
+            "keyword_score": round(keyword_score, 2),
+            "final_score": round(final_score, 2)
+        }
+    except Exception as e:
+        return {"error": str(e)}
 
 
 
