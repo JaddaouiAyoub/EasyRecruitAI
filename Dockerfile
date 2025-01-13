@@ -1,8 +1,8 @@
-# Utiliser une image Python de base
-FROM python:3.10-slim
+# Utiliser une image Python alpine plus légère (en fonction des besoins)
+FROM python:3.10-alpine
 
 # Installer les dépendances système nécessaires
-RUN apt-get update && apt-get install -y \
+RUN apk update && apk add --no-cache \
     libgl1-mesa-glx \
     libglib2.0-0 \
     libsm6 \

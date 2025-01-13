@@ -1,6 +1,6 @@
 fastapi==0.115.5
 uvicorn==0.32.0
-torch==2.5.1
+torch==2.5.1+cpu
 torchvision==0.20.1
 ultralytics==8.3.57
 Pillow==9.5.0
@@ -8,3 +8,4 @@ numpy==2.0.2
 speechrecognition==3.11.0
 PyMuPDF==1.25.1
 python-multipart==0.0.17
+pydub
