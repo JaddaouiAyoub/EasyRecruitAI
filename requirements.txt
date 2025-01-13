@@ -7,5 +7,4 @@ Pillow==9.5.0
 numpy==2.0.2
 speechrecognition==3.11.0
 PyMuPDF==1.25.1
-re==2.2.1  # (librairie standard, pas besoin de l'installer)
 python-multipart==0.0.17
