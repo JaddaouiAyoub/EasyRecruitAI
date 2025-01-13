@@ -1,14 +1,17 @@
-# Utiliser une image Python alpine plus légère (en fonction des besoins)
+# Utiliser une image Python alpine plus légère
 FROM python:3.10-alpine
 
-# Installer les dépendances système nécessaires
+# Installer les dépendances système nécessaires pour le support OpenCV, etc.
 RUN apk update && apk add --no-cache \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-    libsm6 \
-    libxext6 \
-    libxrender-dev
-
+    mesa-gl \
+    libx11 \
+    libxext \
+    libxrender \
+    libsm \
+    cairo-dev \
+    bash \
+    && rm -rf /var/lib/apt/lists/*
+    
 # Définir le répertoire de travail
 WORKDIR /app
 
